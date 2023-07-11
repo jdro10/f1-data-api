@@ -3,23 +3,27 @@ const router = express.Router();
 const mysql = require("../database/mysql");
 
 router.get("/circuits", async (req, res) => {
-  mysql.query("SELECT * FROM circuits", (err, result) => {
+  const query = "SELECT * FROM circuits";
+
+  mysql.query(query, (err, result) => {
+    if (err) {
+      throw err;
+    }
+
     return res.json(result);
   });
 });
 
 router.get("/circuits/:name", (req, res) => {
-  mysql.query(
-    "SELECT * FROM circuits WHERE circuitRef = ?",
-    [req.params.name],
-    (err, result) => {
-      if (err) {
-        throw err;
-      }
+  const query = "SELECT * FROM circuits WHERE circuitRef = ?";
 
-      return res.json(result);
+  mysql.query(query, [req.params.name], (err, result) => {
+    if (err) {
+      throw err;
     }
-  );
+
+    return res.json(result);
+  });
 });
 
 router.get("/:year/circuits", (req, res) => {
