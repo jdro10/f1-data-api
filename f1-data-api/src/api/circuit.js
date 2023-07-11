@@ -8,4 +8,18 @@ router.get("/circuits", async (req, res) => {
   });
 });
 
+router.get("/circuits/:name", (req, res) => {
+  mysql.query(
+    "SELECT * FROM circuits WHERE circuitRef = ?",
+    [req.params.name],
+    (err, result) => {
+      if (err) {
+        throw err;
+      }
+
+      return res.json(result);
+    }
+  );
+});
+
 module.exports = router;
