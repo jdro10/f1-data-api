@@ -22,4 +22,19 @@ router.get("/circuits/:name", (req, res) => {
   );
 });
 
+router.get("/:year/circuits", (req, res) => {
+  const query = `SELECT c.*
+                FROM circuits c
+                JOIN races r ON r.circuitId = c.circuitId
+                WHERE r.year = ?`;
+
+  mysql.query(query, [req.params.year], (err, result) => {
+    if (err) {
+      throw err;
+    }
+
+    return res.json(result);
+  });
+});
+
 module.exports = router;
