@@ -6,7 +6,7 @@
     "description": ""
   },
   "host": "localhost:3000",
-  "basePath": "/",
+  "basePath": "/api/f1",
   "schemes": [
     "http"
   ],
