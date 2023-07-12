@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const mysql = require("../database/mysql");
+const DEFAULT_QUERY_LIMIT = 30;
 
 router.get("/circuits", async (req, res) => {
-  const query = "SELECT * FROM circuits";
+  const query = `SELECT *
+                FROM circuits
+                LIMIT ?`;
 
-  mysql.query(query, (err, result) => {
+  const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
+
+  mysql.query(query, [queryLimit], (err, result) => {
     if (err) {
       throw err;
     }
@@ -15,9 +20,14 @@ router.get("/circuits", async (req, res) => {
 });
 
 router.get("/circuits/:name", (req, res) => {
-  const query = "SELECT * FROM circuits WHERE circuitRef = ?";
+  const query = `SELECT *
+                FROM circuits
+                WHERE circuitRef = ?
+                LIMIT ?`;
 
-  mysql.query(query, [req.params.name], (err, result) => {
+  const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
+
+  mysql.query(query, [req.params.name, queryLimit], (err, result) => {
     if (err) {
       throw err;
     }
@@ -30,9 +40,12 @@ router.get("/:year/circuits", (req, res) => {
   const query = `SELECT c.*
                 FROM circuits c
                 JOIN races r ON r.circuitId = c.circuitId
-                WHERE r.year = ?`;
+                WHERE r.year = ?
+                LIMIT ?`;
 
-  mysql.query(query, [req.params.year], (err, result) => {
+  const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
+
+  mysql.query(query, [req.params.year, queryLimit], (err, result) => {
     if (err) {
       throw err;
     }
@@ -45,9 +58,12 @@ router.get("/:year/:round/circuits", (req, res) => {
   const query = `SELECT c.*
                 FROM circuits c
                 JOIN races r ON r.circuitId = c.circuitId
-                WHERE r.year = ? AND r.round = ?`;
+                WHERE r.year = ? AND r.round = ?
+                LIMIT ?`;
 
-  mysql.query(query, [req.params.year, req.params.round], (err, result) => {
+  const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
+
+  mysql.query(query, [req.params.year, req.params.round, queryLimit], (err, result) => {
     if (err) {
       throw err;
     }
