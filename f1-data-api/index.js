@@ -4,7 +4,7 @@ const port = 3000;
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger.json');
 
-const circuit = require('./src/api/circuit');
+const circuit = require('./src/api/circuits');
 
 app.use(express.json());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
