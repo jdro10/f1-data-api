@@ -20,12 +20,9 @@ router.get("/circuits", async (req, res) => {
 router.get("/circuits/:name", async (req, res) => {
   const queryString = `SELECT *
                       FROM circuits
-                      WHERE circuitRef = ?
-                      LIMIT ?`;
+                      WHERE circuitRef = ?`;
 
-  const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
-
-  const circuits = await db.query(queryString, [req.params.name, queryLimit]).catch((err) => {
+  const circuits = await db.query(queryString, [req.params.name]).catch((err) => {
     throw err;
   });
 
@@ -35,9 +32,9 @@ router.get("/circuits/:name", async (req, res) => {
 router.get("/:year/circuits", async (req, res) => {
   const queryString = `SELECT c.*
                       FROM circuits c
+                      LIMIT ?
                       JOIN races r ON r.circuitId = c.circuitId
-                      WHERE r.year = ?
-                      LIMIT ?`;
+                      WHERE r.year = ?`;
 
   const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
 
