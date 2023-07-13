@@ -24,7 +24,8 @@ router.get("/circuits/:circuitName/seasons", async (req, res) => {
                       JOIN races r ON r.year = s.year
                       JOIN circuits c ON c.circuitId = r.circuitId
                       WHERE c.circuitRef = ?
-                      ORDER BY s.year`;
+                      ORDER BY s.year
+                      LIMIT ?`;
 
   const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
 
