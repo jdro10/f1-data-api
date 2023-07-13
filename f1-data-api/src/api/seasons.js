@@ -18,4 +18,21 @@ router.get("/seasons", async (req, res) => {
   return res.json(seasons);
 });
 
+router.get("/circuits/:circuitName/seasons", async (req, res) => {
+  const queryString = `SELECT DISTINCT s.*
+                FROM seasons s
+                JOIN races r ON r.year = s.year
+                JOIN circuits c ON c.circuitId = r.circuitId
+                WHERE c.circuitRef = ?
+                ORDER BY s.year`;
+
+  const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
+
+  const seasons = await db.query(queryString, [req.params.circuitName, queryLimit]).catch((err) => {
+    throw err;
+  });
+
+  return res.json(seasons);
+});
+
 module.exports = router;
