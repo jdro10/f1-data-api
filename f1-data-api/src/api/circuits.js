@@ -17,12 +17,12 @@ router.get("/circuits", async (req, res) => {
   return res.json(circuits);
 });
 
-router.get("/circuits/:name", async (req, res) => {
+router.get("/circuits/:circuitName", async (req, res) => {
   const queryString = `SELECT *
                       FROM circuits
                       WHERE circuitRef = ?`;
 
-  const circuits = await db.query(queryString, [req.params.name]).catch((err) => {
+  const circuits = await db.query(queryString, [req.params.circuitName]).catch((err) => {
     throw err;
   });
 
