@@ -20,11 +20,11 @@ router.get("/seasons", async (req, res) => {
 
 router.get("/circuits/:circuitName/seasons", async (req, res) => {
   const queryString = `SELECT DISTINCT s.*
-                FROM seasons s
-                JOIN races r ON r.year = s.year
-                JOIN circuits c ON c.circuitId = r.circuitId
-                WHERE c.circuitRef = ?
-                ORDER BY s.year`;
+                      FROM seasons s
+                      JOIN races r ON r.year = s.year
+                      JOIN circuits c ON c.circuitId = r.circuitId
+                      WHERE c.circuitRef = ?
+                      ORDER BY s.year`;
 
   const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
 
