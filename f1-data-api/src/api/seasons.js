@@ -56,4 +56,23 @@ router.get("/constructors/:constructorName/seasons", async (req, res) => {
   return res.json(seasons);
 });
 
+router.get("/drivers/:driverId/seasons", async (req, res) => {
+  const queryString = `SELECT DISTINCT s.*
+                      FROM seasons s
+                      JOIN races r ON r.year = s.year
+                      JOIN results rs ON rs.raceId = r.raceId
+                      JOIN drivers d ON d.driverId = rs.driverId
+                      WHERE d.driverRef = ?
+                      ORDER BY s.year
+                      LIMIT ?`;
+
+  const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
+
+  const seasons = await db.query(queryString, [req.params.driverId, queryLimit]).catch((err) => {
+    throw err;
+  });
+
+  return res.json(seasons);
+});
+
 module.exports = router;
