@@ -14,7 +14,15 @@ router.get("/circuits", async (req, res) => {
     throw err;
   });
 
-  return res.json(circuits);
+  return res.json({
+    info: {
+      limit: queryLimit,
+      total: circuits.length,
+    },
+    results: {
+      circuits: circuits,
+    },
+  });
 });
 
 router.get("/circuits/:circuitName", async (req, res) => {
@@ -26,15 +34,23 @@ router.get("/circuits/:circuitName", async (req, res) => {
     throw err;
   });
 
-  return res.json(circuits);
+  return res.json({
+    info: {
+      total: circuits.length,
+    },
+    results: {
+      circuitName: req.params.circuitName,
+      circuits: circuits,
+    },
+  });
 });
 
 router.get("/:year/circuits", async (req, res) => {
   const queryString = `SELECT c.*
                       FROM circuits c
-                      LIMIT ?
                       JOIN races r ON r.circuitId = c.circuitId
-                      WHERE r.year = ?`;
+                      WHERE r.year = ?
+                      LIMIT ?`;
 
   const queryLimit = req.query.limit !== undefined ? parseInt(req.query.limit) : DEFAULT_QUERY_LIMIT;
 
@@ -42,7 +58,16 @@ router.get("/:year/circuits", async (req, res) => {
     throw err;
   });
 
-  return res.json(circuits);
+  return res.json({
+    info: {
+      limit: queryLimit,
+      total: circuits.length,
+    },
+    results: {
+      year: req.params.year,
+      circuits: circuits,
+    },
+  });
 });
 
 router.get("/:year/:round/circuits", async (req, res) => {
@@ -55,7 +80,16 @@ router.get("/:year/:round/circuits", async (req, res) => {
     throw err;
   });
 
-  return res.json(circuits);
+  return res.json({
+    info: {
+      total: circuits.length,
+    },
+    results: {
+      year: req.params.year,
+      round: req.params.round,
+      circuits: circuits,
+    },
+  });
 });
 
 module.exports = router;

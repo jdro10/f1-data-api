@@ -15,7 +15,15 @@ router.get("/seasons", async (req, res) => {
     throw err;
   });
 
-  return res.json(seasons);
+  return res.json({
+    info: {
+      limit: queryLimit,
+      total: seasons.length,
+    },
+    results: {
+      seasons: seasons,
+    },
+  });
 });
 
 router.get("/circuits/:circuitName/seasons", async (req, res) => {
@@ -33,7 +41,16 @@ router.get("/circuits/:circuitName/seasons", async (req, res) => {
     throw err;
   });
 
-  return res.json(seasons);
+  return res.json({
+    info: {
+      limit: queryLimit,
+      total: seasons.length,
+    },
+    results: {
+      circuitName: req.params.circuitName,
+      seasons: seasons,
+    },
+  });
 });
 
 router.get("/constructors/:constructorName/seasons", async (req, res) => {
@@ -53,7 +70,16 @@ router.get("/constructors/:constructorName/seasons", async (req, res) => {
     throw err;
   });
 
-  return res.json(seasons);
+  return res.json({
+    info: {
+      limit: queryLimit,
+      total: seasons.length,
+    },
+    results: {
+      constructorName: req.params.constructorName,
+      seasons: seasons,
+    },
+  });
 });
 
 router.get("/drivers/:driverId/seasons", async (req, res) => {
@@ -72,7 +98,16 @@ router.get("/drivers/:driverId/seasons", async (req, res) => {
     throw err;
   });
 
-  return res.json(seasons);
+  return res.json({
+    info: {
+      limit: queryLimit,
+      total: seasons.length,
+    },
+    results: {
+      driverId: req.params.driverId,
+      seasons: seasons,
+    },
+  });
 });
 
 module.exports = router;
