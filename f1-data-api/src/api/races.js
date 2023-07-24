@@ -26,4 +26,46 @@ router.get("/races/current", async (req, res) => {
   });
 });
 
+router.get("/races/current/next", async (req, res) => {
+  const queryString = `SELECT *
+                        FROM races
+                        WHERE year = ${new Date().getFullYear()} and date >= CURDATE()
+                        ORDER BY date
+                        LIMIT 1`;
+
+  const currentSeasonNextRace = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+
+  return res.json({
+    info: {
+      total: currentSeasonNextRace.length,
+    },
+    results: {
+      races: currentSeasonNextRace,
+    },
+  });
+});
+
+router.get("/races/current/last", async (req, res) => {
+  const queryString = `SELECT *
+                        FROM races
+                        WHERE year = ${new Date().getFullYear()} and date < CURDATE()
+                        ORDER BY date DESC
+                        LIMIT 1`;
+
+  const currentSeasonLastRace = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+
+  return res.json({
+    info: {
+      total: currentSeasonLastRace.length,
+    },
+    results: {
+      races: currentSeasonLastRace,
+    },
+  });
+});
+
 module.exports = router;
