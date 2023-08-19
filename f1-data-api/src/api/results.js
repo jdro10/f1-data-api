@@ -14,12 +14,15 @@ router.get("/:year/:round/results", async (req, res) => {
                       WHERE year = ? AND round = ?`;
 
   const raceResultQuery = `SELECT res.number, res.position, res.positionText, res.points,
-                                  d.driverId, d.number, d.code, d.forename AS firstName, d.surname AS lastName,
-                                  d.nationality, res.grid, res.laps, res.statusId, res.time, s.status
+                                  d.driverId, d.number, d.code, d.forename AS firstName, 
+                                  d.surname AS lastName, d.nationality, ct.constructorId,
+                                  ct.name AS constructorName, res.grid, res.laps, res.statusId,
+                                  res.time, s.status
                       FROM results res
                       JOIN races r ON r.raceId = res.raceId
                       JOIN drivers d ON d.driverId = res.driverId
                       JOIN status s ON s.statusId = res.statusId
+                      JOIN constructors ct ON ct.constructorId = res.constructorId
                       WHERE r.year = ? AND r.round = ?
                       LIMIT ?`;
 
