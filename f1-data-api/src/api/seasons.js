@@ -26,6 +26,44 @@ router.get("/seasons", async (req, res) => {
   });
 });
 
+router.get("/seasons/current", async (req, res) => {
+  const queryString = `SELECT *
+                      FROM seasons
+                      WHERE year = YEAR(CURDATE())`;
+
+  const seasons = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+
+  return res.json({
+    info: {
+      total: seasons.length,
+    },
+    results: {
+      seasons: seasons,
+    },
+  });
+});
+
+router.get("/seasons/last", async (req, res) => {
+  const queryString = `SELECT *
+                      FROM seasons
+                      WHERE year = YEAR(CURDATE()) - 1`;
+
+  const seasons = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+
+  return res.json({
+    info: {
+      total: seasons.length,
+    },
+    results: {
+      seasons: seasons,
+    },
+  });
+});
+
 router.get("/circuits/:circuitName/seasons", async (req, res) => {
   const queryString = `SELECT DISTINCT s.*
                       FROM seasons s
